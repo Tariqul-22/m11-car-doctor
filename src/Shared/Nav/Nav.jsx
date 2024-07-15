@@ -2,14 +2,39 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.svg"
 import { IoSearchOutline } from "react-icons/io5";
 import { SlHandbag } from "react-icons/sl";
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Nav = () => {
+    const {user, logOut} = useContext(AuthContext)
+
+    const handleLogOut = () =>{
+        logOut()
+        .then(() =>{
+            console.log('Log Out Successfully');
+            toast('Log Out Successfully')
+        })
+        .catch(error =>{
+            console.log(error.message);
+        })
+    }
     const navList = <>
         <NavLink to='/'><li>Home</li></NavLink>
         <NavLink to='/about'><li>About</li></NavLink>
         <NavLink to='/services'><li>Services</li></NavLink>
-        <NavLink to='/blog'><li>Blog</li></NavLink>
+        {/* <NavLink to='/blog'><li>Blog</li></NavLink> */}
         <NavLink to='/contact'><li>Contact</li></NavLink>
+        {
+            user ? <>
+            <NavLink to='/myBookings'><li>My Bookings</li></NavLink>
+            <NavLink><button onClick={handleLogOut}><li>Log Out</li></button></NavLink>
+            </>
+            : <NavLink to='/login'><li>Login</li></NavLink>
+        }
+        
+        
     </>
     return (
         <div className="navbar bg-base-100 my-10 font-bold">
@@ -36,6 +61,7 @@ const Nav = () => {
             <IoSearchOutline></IoSearchOutline>
             <button className="btn btn-orange-outline">Appointment</button>
             </div>
+            <ToastContainer />
         </div>
     );
 };

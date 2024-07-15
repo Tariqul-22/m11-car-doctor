@@ -10,26 +10,46 @@ import Home from './Pages/Home/Home';
 import Login from './Pages/Login/Login';
 import SignUp from './Pages/SignUp/SignUp';
 import AuthProvider from './Provider/AuthProvider/AuthProvider';
+import CheckOut from './Pages/Check Out/CheckOut';
+import MyBookings from './Pages/MyBookings/MyBookings';
+import PrivateRoutes from './PrivateRoutes/PrivateRoutes';
+import BookingItemForm from './Pages/BookingPageForm/BookingItemForm';
+import ErrorPage from './Pages/ErrorPage/ErrorPage';
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root></Root>,
+    errorElement:<ErrorPage></ErrorPage>,
     children: [
       {
         path: '/',
         element: <Home></Home>
       },
+      {
+        path: '/login',
+        element: <Login></Login>
+      },
+      {
+        path: '/signUp',
+        element: <SignUp></SignUp>
+      },
+      {
+        path: '/checkOut/:id',
+        element: <CheckOut></CheckOut>,
+        loader: ({params}) => fetch(`http://localhost:5000/services/${params.id}`)
+      },
+      {
+        path: '/booking/:id',
+        element: <PrivateRoutes><BookingItemForm></BookingItemForm></PrivateRoutes>,
+        loader: ({params}) => fetch(`http://localhost:5000/services/${params.id}`)
+      },
+      {
+        path: '/myBookings',
+        element: <PrivateRoutes><MyBookings></MyBookings></PrivateRoutes>
+      }
     ]
-  },
-  {
-    path: '/login',
-    element: <Login></Login>
-  },
-  {
-    path: '/signUp',
-    element: <SignUp></SignUp>
   },
 ]);
 

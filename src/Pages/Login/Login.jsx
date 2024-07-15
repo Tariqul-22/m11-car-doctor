@@ -1,12 +1,16 @@
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import img from "../../assets/images/login/login.svg"
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
+import axios from "axios";
 
 const Login = () => {
-    const {signInByEmail, signInByGoogle} = useContext(AuthContext)
+    const { signInByEmail, signInByGoogle } = useContext(AuthContext)
+    const location = useLocation()
+    console.log(location);
+    const navigate = useNavigate()
 
     const handleLoginForm = e => {
         e.preventDefault();
@@ -16,25 +20,39 @@ const Login = () => {
         const email = form.email.value
         const password = form.password.value
 
-        console.log(email, password);
+        // console.log(email, password);
 
         signInByEmail(email, password)
-        .then(result =>{
-            console.log(result.user);
-        })
-        .catch(error =>{
-            console.log(error.message);
-        })
+            .then(result => {
+                const loggedUser = result.user
+                console.log(loggedUser);
+
+                const user = { email }
+                axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+                    .then(function (response) {
+                        console.log(response.data);
+                        if (response.data.success) {
+                            navigate(location?.state ? location.state : '/')
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
     }
 
-    const handleGoogleLogin = () =>{
+    const handleGoogleLogin = () => {
         signInByGoogle()
-        .then(result =>{
-            console.log(result.user);
-        })
-        .catch(error =>{
-            console.log(error.message);
-        })
+            .then(result => {
+                console.log(result.user);
+                navigate(location?.state ? location.state : '/')
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
     }
     return (
         <div className="hero min-h-screen font-inter">

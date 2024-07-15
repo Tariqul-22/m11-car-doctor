@@ -6,7 +6,7 @@ import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 import { useContext } from "react";
 
 const SignUp = () => {
-    const {createUserByEmail, signInByGoogle} = useContext(AuthContext)
+    const { createUserByEmail, signInByGoogle, profileUpdate } = useContext(AuthContext)
     const handleSignUpForm = e => {
         e.preventDefault();
 
@@ -19,22 +19,24 @@ const SignUp = () => {
         console.log(name, email, password);
 
         createUserByEmail(email, password)
-        .then(result =>{
-            console.log(result.user);
-        })
-        .catch(error =>{
-            console.log(error.message);
-        })
+            .then(result => {
+                console.log(result.user);
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
+        profileUpdate(name)
+
     }
 
-    const handleGoogleSignUp = () =>{
+    const handleGoogleSignUp = () => {
         signInByGoogle()
-        .then(result =>{
-            console.log(result.user);
-        })
-        .catch(error =>{
-            console.log(error.message);
-        })
+            .then(result => {
+                console.log(result.user);
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
     }
     return (
         <div className="hero min-h-screen font-inter">
