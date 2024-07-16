@@ -46,8 +46,17 @@ const Login = () => {
     const handleGoogleLogin = () => {
         signInByGoogle()
             .then(result => {
-                console.log(result.user);
-                navigate(location?.state ? location.state : '/')
+                const loggedUser = result.user
+                console.log(loggedUser);
+                const user = { email: loggedUser.email }
+                axiosSecure.post('/jwt',user)
+                .then(res =>{
+                    console.log(res.data);
+                    if (res.data.success) {
+                        navigate(location?.state ? location.state : '/')
+                    }
+                })
+                .catch(error => console.log(error))
             })
             .catch(error => {
                 console.log(error.message);
