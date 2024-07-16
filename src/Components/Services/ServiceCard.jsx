@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const ServiceCard = ({ service }) => {
     const { _id, title, price, img } = service
-    console.log(service);
+    // console.log(service);
     return (
         <div className="card bg-base-100 border border-[#E8E8E8]">
             <figure className="px-6 pt-6 h-2/3">

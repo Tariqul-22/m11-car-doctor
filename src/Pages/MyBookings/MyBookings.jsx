@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import MyBookingRow from "./MyBookingRow";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
 import useAuth from "../../Hocks/useAuth";
+import useAxiosSecure from "../../Hocks/useAxiosSecure";
 
 
 const MyBookings = () => {
     const { user } = useAuth();
     const [myBookings, setMyBookings] = useState(null)
+    const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/bookings?email=${user?.email}`, {withCredentials: true})
+        axiosSecure.get(`/bookings?email=${user?.email}`)
         .then(res => {
-            console.log(res);
+            console.log(res.data);
             setMyBookings(res.data)
         })
 
