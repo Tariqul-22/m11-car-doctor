@@ -2,8 +2,6 @@ import { BiSolidMessageRoundedDots } from "react-icons/bi";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { FaCalendarAlt, FaRegClock } from "react-icons/fa";
 import { ImLocation2 } from "react-icons/im";
-import { LuClock3 } from "react-icons/lu";
-import { SlCalender } from "react-icons/sl";
 import { TbOvalVerticalFilled } from "react-icons/tb";
 
 
