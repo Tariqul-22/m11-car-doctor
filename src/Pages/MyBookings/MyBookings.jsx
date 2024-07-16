@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
+import { useEffect, useState } from "react";
 import MyBookingRow from "./MyBookingRow";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import useAuth from "../../Hocks/useAuth";
 
 
 const MyBookings = () => {
-    const { user } = useContext(AuthContext)
+    const { user } = useAuth();
     const [myBookings, setMyBookings] = useState(null)
 
     useEffect(() => {

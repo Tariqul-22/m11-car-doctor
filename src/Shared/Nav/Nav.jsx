@@ -2,13 +2,12 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.svg"
 import { IoSearchOutline } from "react-icons/io5";
 import { SlHandbag } from "react-icons/sl";
-import { useContext } from "react";
-import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from "../../Hocks/useAuth";
 
 const Nav = () => {
-    const {user, logOut} = useContext(AuthContext)
+    const {user, logOut} = useAuth();
 
     const handleLogOut = () =>{
         logOut()

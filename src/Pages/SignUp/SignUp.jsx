@@ -2,11 +2,10 @@ import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import img from "../../assets/images/login/login.svg"
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
-import { useContext } from "react";
+import useAuth from "../../Hocks/useAuth";
 
 const SignUp = () => {
-    const { createUserByEmail, signInByGoogle, profileUpdate } = useContext(AuthContext)
+    const { createUserByEmail, signInByGoogle, profileUpdate } = useAuth();
     const handleSignUpForm = e => {
         e.preventDefault();
 

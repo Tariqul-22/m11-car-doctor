@@ -2,12 +2,11 @@ import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import img from "../../assets/images/login/login.svg"
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 import axios from "axios";
+import useAuth from "../../Hocks/useAuth";
 
 const Login = () => {
-    const { signInByEmail, signInByGoogle } = useContext(AuthContext)
+    const { signInByEmail, signInByGoogle } = useAuth();
     const location = useLocation()
     console.log(location);
     const navigate = useNavigate()

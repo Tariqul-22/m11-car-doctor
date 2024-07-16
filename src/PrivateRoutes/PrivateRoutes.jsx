@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import { AuthContext } from "../Provider/AuthProvider/AuthProvider";
 import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { ClockLoader } from "react-spinners";
+import useAuth from "../Hocks/useAuth";
 
 
 const PrivateRoutes = ({children}) => {
-    const {user, loading} = useContext(AuthContext)
+    const {user, loading} = useAuth();
     const location = useLocation()
     // console.log(location);
 

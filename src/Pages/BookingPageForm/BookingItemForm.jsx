@@ -1,12 +1,12 @@
-import { useContext } from "react";
+
 import { useLoaderData } from "react-router-dom";
-import { AuthContext } from "../../Provider/AuthProvider/AuthProvider";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from "../../Hocks/useAuth";
 
 const BookingItemForm = () => {
     const service = useLoaderData()
-    const { user } = useContext(AuthContext)
+    const { user } = useAuth();
     const { _id, title, price, img } = service
     console.log(user);
 
