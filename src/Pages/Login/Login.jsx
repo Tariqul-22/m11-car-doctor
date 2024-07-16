@@ -2,18 +2,18 @@ import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import img from "../../assets/images/login/login.svg"
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import useAuth from "../../Hocks/useAuth";
+import useAxiosSecure from "../../Hocks/useAxiosSecure";
 
 const Login = () => {
     const { signInByEmail, signInByGoogle } = useAuth();
     const location = useLocation()
     console.log(location);
     const navigate = useNavigate()
+    const axiosSecure = useAxiosSecure();
 
     const handleLoginForm = e => {
         e.preventDefault();
-
         const form = e.target
 
         const email = form.email.value
@@ -27,7 +27,7 @@ const Login = () => {
                 console.log(loggedUser);
 
                 const user = { email }
-                axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+                axiosSecure.post('/jwt', user)
                     .then(function (response) {
                         console.log(response.data);
                         if (response.data.success) {

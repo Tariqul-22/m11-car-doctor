@@ -5,17 +5,16 @@ import { SlHandbag } from "react-icons/sl";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuth from "../../Hocks/useAuth";
-import axios from "axios";
+import useAxiosSecure from "../../Hocks/useAxiosSecure";
 
 const Nav = () => {
     const {user, logOut} = useAuth();
+    const axiosSecure = useAxiosSecure();
 
     const handleLogOut = () =>{
         logOut()
         .then(() =>{
-            axios.post('http://localhost:5000/logout', user,{
-                withCredentials: true
-            })
+            axiosSecure.post('/logout', user)
             .then(res =>{
                 console.log(res.data);
                 console.log('logout successfully');

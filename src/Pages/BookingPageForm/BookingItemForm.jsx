@@ -1,14 +1,30 @@
 
-import { useLoaderData } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuth from "../../Hocks/useAuth";
+import { useEffect, useState } from "react";
+import useAxiosSecure from "../../Hocks/useAxiosSecure";
+
 
 const BookingItemForm = () => {
-    const service = useLoaderData()
+    const { id } = useParams();
     const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const [service, setService] = useState([])
     const { _id, title, price, img } = service
+
+    useEffect(() => {
+        axiosSecure.get(`/services/${id}`)
+            .then(res => {
+                console.log(res.data);
+                setService(res.data)
+            })
+            .catch(error => console.log(error))
+    }, [id])
+
     console.log(user);
+    console.log(service);
 
     const handleOrderSubmit = (e) => {
         e.preventDefault();
@@ -32,30 +48,22 @@ const BookingItemForm = () => {
         }
         console.log(booking);
 
-        fetch('http://localhost:5000/bookings', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(booking)
+        axiosSecure.post('/bookings', booking)
+        .then(res =>{
+            console.log(res.data);
+            if (res.data?.acknowledged) {
+                toast.success("Order added successfully");
+            }
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                if (data?.acknowledged) {
-                    toast.success("Order added successfully");
-                }
-            })
-
-
+        .catch(error => console.log(error))
     }
     return (
         <div>
-            <div className="h-[300px] bg-[url('././assets/images/checkout/checkout.png')] bg-no-repeat bg-cover rounded-xl text-white mt-14">
-                <p>{_id}</p>
-                <p>{title}</p>
-                <p>{price}</p>
-                <p className="text-6xl text-center">Your Order</p>
+            <div className="h-[300px] bg-[url('././assets/images/checkout/checkout.png')] bg-no-repeat bg-cover rounded-xl mt-14 flex items-center justify-center">
+                <div className="text-center text-white space-y-3">
+                    <p className="text-6xl">Your Order: <span>{title}</span></p>
+                    <p className="text-2xl">Price: ${price}</p>
+                </div>
             </div>
             <div className="my-32 bg-[#F3F3F3] rounded-xl md:p-20 p-10">
                 <form onSubmit={handleOrderSubmit} className="grid lg:grid-cols-2 gap-6">
@@ -81,7 +89,7 @@ const BookingItemForm = () => {
                         <label className="label">
                             <span className="font-semibold">Due Amount:</span>
                         </label>
-                        <input type="text" defaultValue={'$' + price} className="input input-bordered" name="amount" required />
+                        <input type="text" defaultValue={price} className="input input-bordered" name="amount" required />
                     </div>
 
                     <label className="form-control lg:col-span-2">

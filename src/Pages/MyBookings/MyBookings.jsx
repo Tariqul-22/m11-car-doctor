@@ -8,15 +8,15 @@ import useAxiosSecure from "../../Hocks/useAxiosSecure";
 
 const MyBookings = () => {
     const { user } = useAuth();
-    const [myBookings, setMyBookings] = useState(null)
+    const [myBookings, setMyBookings] = useState([])
     const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
         axiosSecure.get(`/bookings?email=${user?.email}`)
-        .then(res => {
-            console.log(res.data);
-            setMyBookings(res.data)
-        })
+            .then(res => {
+                console.log(res.data);
+                setMyBookings(res.data)
+            })
 
 
         // fetch(`http://localhost:5000/bookings?email=${user?.email}`)
@@ -38,13 +38,11 @@ const MyBookings = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/bookings/${id}`, {
-                    method: 'DELETE'
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(data);
-                        if (data.acknowledged) {
+
+                axiosSecure.delete(`/bookings/${id}`)
+                    .then(res => {
+                        console.log(res.data);
+                        if (res.data.acknowledged) {
                             console.log('delete', id);
                             Swal.fire({
                                 title: "Deleted!",
@@ -55,22 +53,18 @@ const MyBookings = () => {
                             setMyBookings(remaining)
                         }
                     })
+                    .catch(error => console.log(error));
             }
         });
     }
     const handleBookingConfirm = id => {
         console.log(id);
-        fetch(`http://localhost:5000/bookings/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({status: 'confirm'})
+        axiosSecure.patch(`/bookings/${id}`, {
+            status: 'confirm'
         })
-        .then(res => res.json())
-        .then(data =>{
-            console.log(data);
-            if (data.modifiedCount > 0) {
+        .then(res =>{
+            console.log(res.data);
+            if (res.data.modifiedCount > 0) {
                 toast.success('data updated');
                 // Updating data
                 const remaining = myBookings.filter(booking => booking._id !== id);
@@ -78,14 +72,14 @@ const MyBookings = () => {
                 updated.status = 'confirm'
                 const newBookings = [updated, ...remaining];
                 setMyBookings(newBookings);
-
             }
+
         })
     }
     return (
         <div className="my-20">
             <div className="h-[300px] bg-[url('././assets/images/checkout/checkout.png')] bg-no-repeat bg-cover rounded-xl text-white mt-14 flex items-center pl-32">
-                <p className="text-4xl font-bold ">Cart Details</p>
+                <p className="text-4xl font-bold ">Cart Details: {myBookings?.length}</p>
             </div>
             <div className="overflow-x-auto mt-10">
                 <table className="table">
@@ -93,7 +87,7 @@ const MyBookings = () => {
                     <thead className="text-xl font-bold ">
                         <tr className="bg-base-200">
                             <th>
-                                
+
                             </th>
                             <th>Service Name</th>
                             <th>Amount</th>
@@ -102,15 +96,15 @@ const MyBookings = () => {
                         </tr>
                     </thead>
                     <tbody>
-                       {
-                         myBookings?.map(booking => <MyBookingRow 
-                            key={booking._id} 
-                            booking={booking}
-                            handleDelete={handleDelete}
-                            handleBookingConfirm={handleBookingConfirm}>
+                        {
+                            myBookings?.map(booking => <MyBookingRow
+                                key={booking._id}
+                                booking={booking}
+                                handleDelete={handleDelete}
+                                handleBookingConfirm={handleBookingConfirm}>
                             </MyBookingRow>)
-                       }
-      
+                        }
+
                     </tbody>
                 </table>
             </div>
